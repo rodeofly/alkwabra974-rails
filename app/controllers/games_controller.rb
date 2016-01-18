@@ -22,9 +22,7 @@ class GamesController < ApplicationController
         end
       end
     end
-    puts "##################################################################################"
-    puts @tentatives
-    puts "##################################################################################"
+    
   end
 
   # GET /games/new

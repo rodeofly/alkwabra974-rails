@@ -14,7 +14,7 @@ class GamesController < ApplicationController
     @tentatives = Array.new(5) { Array.new(20) }
     for c in 0..4
       for l in 0..19
-        tentative = Tentative.where( user_id: current_user.id, game_id: @game.id, chapter: c, level: l, success: true).order(score: :desc).first
+        tentative = Tentative.where( user_id: current_user.id, game_id: @game.id, chapter: c+1, level: l+1, success: true).order(score: :desc).first
         if tentative.present?
         @tentatives[c][l] = tentative.score
         else
