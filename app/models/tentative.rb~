@@ -1,0 +1,2 @@
+class Tentative < ActiveRecord::Base
+end

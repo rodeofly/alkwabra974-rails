@@ -1,0 +1,49 @@
+<%= form_for(@tentative) do |f| %>
+  <% if @tentative.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tentative.errors.count, "error") %> prohibited this tentative from being saved:</h2>
+
+      <ul>
+      <% @tentative.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :game_id %><br>
+    <%= f.number_field :game_id %>
+  </div>
+  <div class="field">
+    <%= f.label :chapter %><br>
+    <%= f.number_field :chapter %>
+  </div>
+  <div class="field">
+    <%= f.label :level %><br>
+    <%= f.number_field :level %>
+  </div>
+  <div class="field">
+    <%= f.label :success %><br>
+    <%= f.check_box :success %>
+  </div>
+  <div class="field">
+    <%= f.label :shots %><br>
+    <%= f.number_field :shots %>
+  </div>
+  <div class="field">
+    <%= f.label :beurk %><br>
+    <%= f.number_field :beurk %>
+  </div>
+  <div class="field">
+    <%= f.label :score %><br>
+    <%= f.number_field :score %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

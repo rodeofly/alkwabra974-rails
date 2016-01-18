@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Tentatives</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Game</th>
+      <th>Chapter</th>
+      <th>Level</th>
+      <th>Success</th>
+      <th>Shots</th>
+      <th>Beurk</th>
+      <th>Score</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tentatives.each do |tentative| %>
+      <tr>
+        <td><%= tentative.user_id %></td>
+        <td><%= tentative.game_id %></td>
+        <td><%= tentative.chapter %></td>
+        <td><%= tentative.level %></td>
+        <td><%= tentative.success %></td>
+        <td><%= tentative.shots %></td>
+        <td><%= tentative.beurk %></td>
+        <td><%= tentative.score %></td>
+        <td><%= link_to 'Show', tentative %></td>
+        <td><%= link_to 'Edit', edit_tentative_path(tentative) %></td>
+        <td><%= link_to 'Destroy', tentative, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Tentative', new_tentative_path %>

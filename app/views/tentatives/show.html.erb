@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @tentative.user_id %>
+</p>
+
+<p>
+  <strong>Game:</strong>
+  <%= @tentative.game_id %>
+</p>
+
+<p>
+  <strong>Chapter:</strong>
+  <%= @tentative.chapter %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @tentative.level %>
+</p>
+
+<p>
+  <strong>Success:</strong>
+  <%= @tentative.success %>
+</p>
+
+<p>
+  <strong>Shots:</strong>
+  <%= @tentative.shots %>
+</p>
+
+<p>
+  <strong>Beurk:</strong>
+  <%= @tentative.beurk %>
+</p>
+
+<p>
+  <strong>Score:</strong>
+  <%= @tentative.score %>
+</p>
+
+<%= link_to 'Edit', edit_tentative_path(@tentative) %> |
+<%= link_to 'Back', tentatives_path %>

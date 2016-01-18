@@ -1,0 +1,76 @@
+class TentativesController < ApplicationController
+  before_action :set_tentative, only: [:show, :edit, :update, :destroy]
+
+  # GET /tentatives
+  # GET /tentatives.json
+  def index
+    @tentatives = Tentative.all
+  end
+
+  # GET /tentatives/1
+  # GET /tentatives/1.json
+  def show
+  end
+
+  # GET /tentatives/new
+  def new
+    @tentative = Tentative.new
+  end
+
+  # GET /tentatives/1/edit
+  def edit
+  end
+
+  # POST /tentatives
+  # POST /tentatives.json
+  def create
+    @tentative = Tentative.new(tentative_params)
+    @tentative.user_id = current_user.id
+    @tentative.game_id = 1
+
+    respond_to do |format|
+      if @tentative.save
+        format.html { redirect_to @tentative, notice: 'Tentative was successfully created.' }
+        format.json { render :show, status: :created, location: @tentative }
+      else
+        format.html { render :new }
+        format.json { render json: @tentative.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /tentatives/1
+  # PATCH/PUT /tentatives/1.json
+  def update
+    respond_to do |format|
+      if @tentative.update(tentative_params)
+        format.html { redirect_to @tentative, notice: 'Tentative was successfully updated.' }
+        format.json { render :show, status: :ok, location: @tentative }
+      else
+        format.html { render :edit }
+        format.json { render json: @tentative.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /tentatives/1
+  # DELETE /tentatives/1.json
+  def destroy
+    @tentative.destroy
+    respond_to do |format|
+      format.html { redirect_to tentatives_url, notice: 'Tentative was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_tentative
+      @tentative = Tentative.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def tentative_params
+      params.require(:tentative).permit(:user_id, :game_id, :chapter, :level, :success, :shots, :beurk, :score)
+    end
+end
