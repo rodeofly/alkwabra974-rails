@@ -523,31 +523,12 @@ game_chapter =
 ################################################################################
 ################################################################################
 ################################################################################
-chapter = 5
-level = 3
-score = 0
-shots = 0
-beurk = 0
-level_data = {}
-unique_id = 1
-zoom = 100
-blocked = false
-drop_once = true
-reversePower = false
-dropdenPower = false
-dropnumPower = false
-stylePower = false
-crossPower = false
-addPower = false
-primePower = false
-multPower = false
-doubleNegPower = false
-cartes = {}
-opposite = {lhs : "rhs", rhs : "lhs"}
-won = false
-
-delay   = (ms, func) -> setTimeout  func, ms
-looping = (ms, func) -> setInterval func, ms
+[unique_id, chapter, level] = [1, 1, 1]
+[level_data, cartes, opposite] = [{}, {}, {lhs : "rhs", rhs : "lhs"} ]
+[score, shots, beurk] = [0, 0, 0]
+[drop_once, blocked, reversePower, dropdenPower, dropnumPower, stylePower, crossPower, addPower, primePower, multPower, negPower, won] = [true, false, false, false, false, false, false, false, false, false, false, false]
+toSend_reset  = -> [score, shots, beurk] = [0, 0, 0]
+boolean_reset = -> [drop_once, blocked, reversePower, dropdenPower, dropnumPower, stylePower, crossPower, addPower, primePower, multPower, negPower, won] = [true, false, false, false, false, false, false, false, false, false, false, false]
 ################################################################################
 ################################################################################
 ################################################################################
@@ -602,8 +583,14 @@ class Fraction
         <div id='numerateur_#{@id}' class='numerateur' data-style='#{stylePower}'>#{n}</div>
         <div id='denominateur_#{@id}' class='denominateur' data-style='#{stylePower}'>#{d}</div>
     </div>
-    """
-
+   """
+################################################################################
+################################################################################
+################################################################################
+delay   = (ms, func) -> setTimeout  func, ms
+################################################################################
+looping = (ms, func) -> setInterval func, ms
+################################################################################
 explosion_effect = (place_id, target) ->
   position = $( "##{place_id}" ).offset()
   $("body").append "<div id='#{id = unique_id++}' style='top: #{position.top-25}px; left: #{position.left-25}px;' class='explosion'></div>"
@@ -615,9 +602,6 @@ explosion_effect = (place_id, target) ->
     delay 800, -> 
       $("##{id}").remove()
       checkSuccess()
-      
-################################################################################
-################################################################################
 ################################################################################
 primeFactorization = (num) ->
   root = Math.sqrt(num)
@@ -637,7 +621,7 @@ primeFactorization = (num) ->
 ################################################################################
 ################################################################################
 shuffle_cards = ( container ) ->
-  console.log "let's shuffle cards in #{container.attr('id')}"
+  #console.log "let's shuffle cards in #{container.attr('id')}"
   maxSearchIterations = 20
   min_x = container.position().left
   max_x = min_x + container.width() - $( ".fraction" ).first().width()
@@ -675,15 +659,10 @@ shuffle_cards = ( container ) ->
       filled_areas.push best_choice
       $(this).css({position: "absolute", left: rand_x, top: rand_y})
       #console.log("and #{$(this).attr('id')} is at (#{rand_x},#{rand_y})")
-   
   randomize( container )
 ################################################################################
 ################################################################################
 ################################################################################
-update_style = () ->
-  $( ".bsign" ).remove()
-  $( "#lhs .fraction:not(:first-child), #rhs .fraction:not(:first-child)" ).before "<span class='bsign'>+</span>"
-
 checkSuccess = () ->
   if not won
     console.log "check success..."
@@ -694,42 +673,42 @@ checkSuccess = () ->
       if (xSide.find(".carte").length is 1)
         console.log "success !"
         won = true
-        $( ".astuce" ).hide()
-        $( "#victory-anime" ).show().css(background : "center no-repeat url(../assets/countdown.gif?#{Math.random()})" )
+        $( "#lhs, #rhs" ).droppable( "destroy" )
+        $( "#astuce" ).hide()
+        $( "#victory-anime" ).show().css(background : "center no-repeat url(<%= asset_path('countdown.gif') %>?#{Math.random()})" )
         delay 5000, ->
           $( "#victory-anime" ).hide()
-          score = 1
-          value_side = opposite[ xSide.attr("data-side") ]
-          items_left = {}
-          list = []
-          $( "##{value_side}" ).find( ".fraction" ).each ->
-            [numerateur, denominateur] = [ [], [] ]
-            $(this).find(".numerateur .carte").each -> numerateur.push $(this).attr("data-valeur")
-            $(this).find(".denominateur .carte").each -> denominateur.push $(this).attr("data-valeur")
-            if denominateur is []
-              list.push( string = numerateur.sort().join(".") )
-              items_left[string] = $(this).attr("id")
-            else
-              list.push( string = numerateur.sort().join(".") )
-              items_left[string] = $(this).attr("id")      
-          while list.length>1
-            item = list.pop()
-            if ( ((item isnt "1") and (item[0] is "1")) or (item.indexOf(".1") > -1) or (item.indexOf("/1") > -1) )
-              beurk++
-              $( "##{items_left[item]}" ).css backgroundColor : "red"
-            if item.indexOf("0") > -1
-              beurk++
-              $( "##{items_left[item]}" ).css backgroundColor : "red"
-            for item2 in list
-              if ( ("-#{item}" is "#{item2}") or ("-#{item2}" is "#{item}") or ("-1.#{item}" is "#{item2}") or ("-1.#{item2}" is "#{item}") )
-                $( "##{items_left[item]}, ##{items_left[item2]}" ).css backgroundColor : "red"
-                beurk = beurk + 2
+          count_beurk = ->
+            [items_left, list, value_side] = [{}, [], xSide.attr("data-side")]
+            $( "##{value_side}" ).find( ".fraction" ).each ->
+              [numerateur, denominateur] = [ [], [] ]
+              $(this).find( ".numerateur .carte" ).each -> numerateur.push $(this).attr("data-valeur")
+              $(this).find(".denominateur .carte").each -> denominateur.push $(this).attr("data-valeur")
+              if denominateur is []
+                list.push( string = numerateur.sort().join(".") )
+                items_left[string] = $(this).attr("id")
+              else
+                list.push( string = numerateur.sort().join(".") )
+                items_left[string] = $(this).attr("id")      
+            while list.length>1
+              item = list.pop()
+              if ( ((item isnt "1") and (item[0] is "1")) or (item.indexOf(".1") > -1) or (item.indexOf("/1") > -1) )
+                beurk++
+                $( "##{items_left[item]}" ).css backgroundColor : "red"
+              if item.indexOf("0") > -1
+                beurk++
+                $( "##{items_left[item]}" ).css backgroundColor : "red"
+              for item2 in list
+                if ( ("-#{item}" is "#{item2}") or ("-#{item2}" is "#{item}") or ("-1.#{item}" is "#{item2}") or ("-1.#{item2}" is "#{item}") )
+                  $( "##{items_left[item]}, ##{items_left[item2]}" ).css backgroundColor : "red"
+                  beurk = beurk + 2                
+          count_beurk()          
           delay 1000, ->
-
             $("#stars").remove()
-            $div = $("<div>", {id: "stars", style: "position:absolute;top:35%;width:100%;text-align : center;"})
-            img = "<img src='<%= asset_path('star.png') %>' style='display:inline-block;width:200px;height:200px;'>"
+            $div = $("<div>", {id: "stars", class: "reward"} )
+            img = "<div class='star-reward'></div>"
             $div.append img
+            score = 1
             if beurk is 0
               $div.append img
               score++
@@ -738,7 +717,6 @@ checkSuccess = () ->
                 score++
             $( "#victory-recap" ).append $div
             previous_score = $( "#score#{chapter}-#{level}" ).find(".star-point").length
-            console.log previous_score
             if score > previous_score
               for i in [1..(score-previous_score)]
                 $( "#score#{chapter}-#{level}" ).append(  "<div class='star-point'></div>" )
@@ -762,23 +740,22 @@ checkSuccess = () ->
                 else
                   $( ".next,.up" ).show()
                 $( "#victory-recap" ).show().fireworks()
-    
+################################################################################  
+update_style = () ->
+  $( ".bsign" ).remove()
+  $( "#lhs .fraction:not(:first-child), #rhs .fraction:not(:first-child)" ).before "<span class='bsign'>+</span>"
+  
 flash_alert = (element) ->
-  $( "#wow_dialog" ).dialog "close"
-  $( "#wow_dialog" ).dialog
-    width    : '50px'
-    height   : 100
-    show     :
-      effect   : "blind"
-      duration : 100
-    position : { my: "center bottom", at: "center top", of: element }
-    open     : (event, ui) -> setTimeout("$('#wow_dialog').dialog('close')",1000)
-  $( "#wow_dialog" ).dialog "open"
-
+  $( "#wow-dialog" ).dialog "close"    
+  $( "#wow-dialog" ).dialog  "open", position : { my: "center bottom", at: "center top", of: element }
+################################################################################
+################################################################################
+################################################################################
 block = (draggable) ->
   console.log "Entering block mode..."
-  $( "#pioche .carte " ).off "click"
-  $( ".carte" ).not(draggable.find(".carte")).on "click mousedown", -> flash_alert(draggable)
+  $( "body" ).off "click", "#pioche .carte"
+  $( "body" ).off "dblclick", ".fraction .carte:not(.fraction[data-side='pioche'])"
+  $( ".carte" ).not(draggable.find(".carte")).on "touchstart mousedown", -> flash_alert(draggable)
   $( ":ui-draggable" ).not(draggable).draggable( "destroy" )
   $( ":ui-droppable" ).droppable( "destroy" )
 
@@ -816,6 +793,9 @@ block = (draggable) ->
     
 unblock = (draggable) ->
   console.log "Leaving block mode..."
+  primeFactorPower()  if ( (chapter > 3) or ((chapter > 3) and (level>3)) )
+  if reversePower
+    $( "body" ).on "click", "#pioche .carte", -> get_card($(this)).reverse() 
   blocked = false
   shots++
   $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
@@ -831,7 +811,7 @@ blockOrNot = (draggable) ->
 ################################################################################
 ################################################################################
 ################################################################################
-dropOnFrac = (numOrDen) ->
+droppableFrac = (numOrDen) ->
   $( ".US").droppable
     greedy : true
     tolerance   : "touch"   
@@ -853,7 +833,7 @@ dropOnFrac = (numOrDen) ->
 ################################################################################
 ################################################################################
 ################################################################################
-fractionSimplify = () ->
+droppableFracSimplify = () ->
   $( ".fraction .carte" ).not(".fraction[data-side='pioche'] .carte").droppable
     greedy    : true
     tolerance : 'touch'        
@@ -882,7 +862,7 @@ fractionSimplify = () ->
 ################################################################################
 ################################################################################
 ################################################################################               
-additionPower = () ->
+droppableFracAddition = () ->
   $( ".fraction" ).droppable
     greedy: true
     tolerance: 'touch'        
@@ -908,8 +888,6 @@ additionPower = () ->
         drag_number = parseInt ui.draggable.children(':first').children().attr("data-valeur") 
         drop_number = parseInt carte.attr("data-valeur") 
         get_card( carte ).moveTo "#{drop_number+drag_number}"
-        shots++
-        $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
       else
         get_card( carte ).moveTo "0"           
       
@@ -918,22 +896,36 @@ additionPower = () ->
       ui.draggable.remove()
       explosion_effect( $(this).attr("id"), "none" )       
       update_style() if stylePower
+################################################################################
+################################################################################  
+################################################################################
+delete_useless_card = () ->
+  $( "body" ).on "click", ".carte[data-valeur='1']:not(:only-child)", (event, ui) ->
+    event.stopPropagation() 
+    shots++
+    $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
+    explosion_effect( $(this).attr("id"), $(this) )
 
-
+  $( "body" ).on "click", ".carte[data-valeur='0']", (event, ui) ->
+    event.stopPropagation() 
+    if $(this).closest(".fraction").parent().children(".fraction").length > 1
+      shots++
+      $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
+      explosion_effect( $(this).attr("id"), $(this).closest(".fraction") )
 ################################################################################
 ################################################################################
 ################################################################################    
 primeFactorPower = () ->  
-  $( ".fraction .carte" ).not( ".fraction[data-side='pioche']" ).on "dblclick", (event, ui) ->
-    event.stopPropagation()  
+  $( "body" ).on "dblclick", ".fraction .carte:not(.fraction[data-side='pioche'])", (event, ui) ->
+    event.stopPropagation()
     value = $(this).attr("data-valeur")
+    console.log value
     if ( ($.isNumeric( value )) and (parseInt(value) > 3) )
       factors = primeFactorization parseInt value 
       $(this).parent().append (new Card(f)).to_html() for f in factors 
       $(this).remove()        
     else
-      console.log "woaer45"
-      if doubleNegPower
+      if negPower
         next = $(this).next(".carte")
         if ( (next.length > 0) and (next.attr("data-valeur")[0] is "-") )
           console.log "woaer"
@@ -944,10 +936,7 @@ primeFactorPower = () ->
           get_card($(this)).reverse()
     shots++
     $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
-    draggableCards()
-    
-
-       
+    draggableCards()      
 ################################################################################
 ################################################################################
 ################################################################################
@@ -1008,10 +997,9 @@ droppableSide = (side) ->
               $("##{side_draggable}").append (new Fraction("0")).to_html()
             else
               checkSuccess()
-            draggableCards()  
+            draggableCards()
 
-################################################################################
-################################################################################
+################################################################################  ################################################################################
 ################################################################################                      
 draggableCards = () ->        
   $( ".fraction[data-side='pioche']" ).draggable
@@ -1023,27 +1011,27 @@ draggableCards = () ->
     start: (e) ->
       if ( dropdenPower and (not blocked))
         $("#lhs .denominateur, #rhs .denominateur" ).not($(".US").parent()).append (new Card("_")).to_html()
-        dropOnFrac("denominateur") 
+        droppableFrac("denominateur") 
       if ( dropnumPower and (not blocked))
         $("#lhs .numerateur, #rhs .numerateur" ).not($(".US").parent()).append (new Card("_")).to_html()
-        dropOnFrac("numerateur")   
+        droppableFrac("numerateur")   
       $( this ).css('z-index', 2)
     stop:  (e) ->
       $( this ).css('z-index', 1)
       $( ".US" ).remove()
-  ##############################################################################
+
   $( ".fraction " ).not( ".fraction[data-side='pioche']" )
     .draggable
       revert: 'invalid'    
       start: (e) -> $( this ).css('z-index', 2)
       stop:  (e) -> $( this ).css('z-index', 1)    
-  ##############################################################################            
+
   switch crossPower
     when true then $( ".fraction " ).not( ".fraction[data-side='pioche']" ).draggable
       containement : "document"
     else           $( ".fraction " ).not( ".fraction[data-side='pioche']" ).draggable
       containement : "parent"
-  ##############################################################################
+
   multPowerSelector = if multPower then ".numerateur .carte:not(:only-child)" else "nothing"
   $( ".denominateur .carte, #{multPowerSelector}" ).not( ".fraction[data-side='pioche'] .carte").draggable
     helper : 'clone'
@@ -1070,35 +1058,16 @@ draggableCards = () ->
     $el = $(this);
     $el.draggable containment: $el.parent().parent()  
    
-  $( ".carte[data-valeur='1']:not(:only-child)" ).not( ".fraction[data-side='pioche'] .carte" ).on "click", ->
-    event.stopPropagation() 
-    shots++
-    $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
-    explosion_effect( $(this).attr("id"), $(this) )
-
-  $( ".carte[data-valeur='0']" ).click (event, ui) ->
-    event.stopPropagation() 
-    if $(this).closest(".fraction").parent().children(".fraction").length > 1
-      shots++
-      $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
-      explosion_effect( $(this).attr("id"), $(this).closest(".fraction") )
-
-  ##############################################################################
-  
-  droppableSide( "lhs" )
-  droppableSide( "rhs" )
-  fractionSimplify()
-  if reversePower
-    $( "#pioche .carte" ).on "click", -> get_card($(this)).reverse() 
-  additionPower()
-  dropOnFrac("denominateur") if dropdenPower 
-  dropOnFrac("numerateur")   if dropnumPower
-  primeFactorPower() if primePower
-  update_style()     if stylePower
+  droppableSide( side ) for side in ["lhs", "rhs"] if not won
+  droppableFracSimplify()
+  droppableFracAddition()
+  droppableFrac("denominateur") if dropdenPower 
+  droppableFrac("numerateur")   if dropnumPower
+  update_style() if stylePower
     
 ################################################################################
 ################################################################################
-################################################################################ 
+################################################################################
 insert = (data, sides=[]) ->
   sides.push('lhs') if data['lhs']?
   sides.push('rhs') if data['rhs']?
@@ -1126,7 +1095,7 @@ animation_tap = (element, image="tap" ) ->
   depart = element.offset()    
   restart()
   boucle = looping 3000, () -> restart()   
-  $( "body" ).one "mousedown", -> 
+  $( "body" ).one "mousedown touchstart", -> 
     clearInterval boucle
     $( "#astuce" ).hide()
 ################################################################################
@@ -1152,7 +1121,7 @@ animation_touch = (element1,element2) ->
   depart = element1.offset()
   restart()
   boucle = looping 3000, () -> restart()   
-  $( "body" ).one "mousedown", -> 
+  $( "body" ).one "mousedown touchstart", -> 
     clearInterval boucle
     $( "#astuce" ).hide()
     clone.remove()
@@ -1174,76 +1143,68 @@ astuces = ->
     when "5-1"  then animation_tap( $( ".carte[data-valeur='-1']" ).first(), "double-tap" )
 ################################################################################
 ################################################################################
-################################################################################     
+################################################################################    
 play = () ->
-  shots = 0
-  beurk = 0
-  won = false
-  blocked = false
   console.log "...entering level #{level}"
-  $( ".astuce, #victory-recap, #victory-anime" ).hide()
-  $("#victory-recap").fireworks("destroy")
-  $( "#level_info" ).html( "#{chapter}-#{level}" )
-  $( "#pioche, #lhs, #rhs" ).hide()
-  drop_once    = false if chapter>1
-  reversePower = true  if ( (level>15 )  or (chapter>1) )
-  dropdenPower = true  if ( (chapter>1) and (level>10) or (chapter > 2) and (not ( (chapter is 3) and (level is 7) )) )
-  dropnumPower = true  if ( (chapter>2) and (level>6)  or (chapter > 3) )
-  crossPower   = true  if chapter > 2
-  addPower     = true  if chapter > 3
-  primePower   = true  if ( (chapter > 3) or ( (chapter > 3) and (level>3)) )
-  multPower    = true  if ( (chapter > 3) or ( (chapter > 3) and (level>7)) )
-  doubleNegPower = true if chapter > 4
-  switch "#{chapter}-#{level}"
-    when "2-19", "2-20", "3-17", "3-18", "3-19", "3-20", "4-17", "4-18", "4-19", "4-20", "5-17","5-18","5-19","5-20" then stylePower = true
-    else stylePower = false 
+  toSend_reset()
+  boolean_reset()
   level_data = game_chapter[chapter].level[level]
   level_data.reveal = level_data.reveal ? []
   if "all" not in level_data.reveal
     level_data.reveal.push( "-#{i}" ) for i in level_data.reveal
   $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
-  insert( level_data ) 
+  $( "#astuce, #victory-recap, #victory-anime, #pioche, #lhs, #rhs" ).hide()
+  $("#victory-recap").fireworks("destroy")
+
+  drop_once    = false if (chapter>1)
+  reversePower = true  if ( (chapter>1) or ((chapter is 1) and (level>15 )) )
+  dropdenPower = true  if ( (chapter>1) and (level>10) or (chapter > 2) and (not ( (chapter is 3) and (level is 7) )) )
+  crossPower   = true  if (chapter>2)
+  dropnumPower = true  if ( (chapter > 3) or ((chapter>2) and (level>6)) )
+  
+  multPower    = true  if ( (chapter > 3) or ((chapter > 3) and (level>7)) )
+  addPower     = true  if (chapter>3)
+  negPower     = true  if chapter > 4
+  stylePower   = true  if "#{chapter}-#{level}" in ["2-19", "2-20", "3-17", "3-18", "3-19", "3-20", "4-17", "4-18", "4-19", "4-20", "5-17","5-18","5-19","5-20"]
+  
+  
+  primeFactorPower()  if ( (chapter > 3) or ((chapter > 3) and (level>3)) )
+  delete_useless_card()
+  if reversePower
+    $( "body" ).on "click", "#pioche .carte", -> get_card($(this)).reverse() 
+    
+  insert( level_data )
   draggableCards()
   astuces()
-  #$( ".carte[data-valeur='x']" ).css background: "100% no-repeat url('x-bg.gif')"
 ################################################################################
 ################################################################################
 ################################################################################     
-
 ready = ->
-  $( ".dialog" ).dialog( autoOpen: false )
-  $("#screen").toggle()
-      
   for i in [1..5]
-    $( "#chaptersEnd" ).before( "<section id='chapter#{i}' class='chapter'><h2>Chapitre #{i}</h2></section>" ) 
+    $( "#chaptersEnd" ).before "<section id='chapter#{i}' class='chapter'><h2>Chapitre #{i}</h2></section>"
     for j in [1..20]
-      $( "#chapter#{i}" ).append( "<div class='level' id='#{i}-#{j}'>#{j}</div>" )
-      $( "##{i}-#{j}" ).append $( "#score#{i}-#{j}" )
-    $( "#chapter#{i}" ).css( background : "url(<%= asset_path('chapters/chapter1.jpg') %>) 100% 100% no-repeat" )
-  
- 
-  
+      $( "#chapter#{i}" ).append "<div class='level' id='#{i}-#{j}'>#{j}</div>"
+      $( "##{i}-#{j}" ).append $( "#score#{i}-#{j}" ) 
   for i in ["1-1", "1-3", "1-9", "1-16", "2-1", "2-5", "2-11", "3-1", "3-7", "4-1", "4-4","4-8", "5-1"]
-    $( "##{i}" ).append "<div class='star'></div>"
+    $( "##{i}" ).append "<div class='new-power'></div>"
   
-  $( "#shots" ).button
-    icons:
-      primary  : "ui-icon-gear",
-    text: false
-  $( ".close" ).on "click", -> $(this).parent().hide()
-  $( "#back" )
-    .button
-      icons:
-        primary  : "ui-icon-arrowreturnthick-1-n"
-      text: false
+  if $( "#reveal" ).length > 0
+    Reveal.initialize { controls: true, progress: true, history: true, center: true, overview: false, minScale: 1, maxScale: 1, transition: 'concave' }
+    # none/fade/slide/convex/concave/zoom
+      
+  $("#screen").hide()
+  $( "#wow-dialog" ).dialog
+    autoOpen : false
+    width    : '50px'
+    height   : 100
+    show     : { effect: "blind", duration: 100 }
+    open     : (event, ui) -> setTimeout("$('#wow-dialog').dialog('close')",1000)
     
-    .on "click", -> $("#reveal,#screen").toggle()
-  $( ".play" )
-    .button
-      icons:
-        primary  : " ui-icon-arrowrefresh-1-e"
-      text: false
-    .on "click", ->    play()
+  $( "#shots" ).button( { icons: { primary  : "ui-icon-gear" }, text: false } )
+  $( "#back" ).button( { icons: { primary  : "ui-icon-arrowreturnthick-1-n" }, text: false})
+  $( "#back" ).on "click", -> $("#reveal,#screen").toggle()
+  $( ".play" ).button( { icons: { primary  : " ui-icon-arrowrefresh-1-e" }, text: false } )
+  $( ".play" ).on "click", ->    play()
   $( ".next" ).on "click", -> play(level++)
   $(  ".up"  ).on "click", -> $("#reveal,#screen").toggle()
   $( ".level" ).on "click", ->
@@ -1251,18 +1212,6 @@ ready = ->
     [chapter, level] = [parseInt(chapter), parseInt(level)]
     $("#reveal,#screen").toggle()
     play() 
-
-  if $( "#reveal" ).length > 0
-    Reveal.initialize
-      controls  : true
-      progress  : true
-      history   : true
-      center    : true
-      overview  : false
-      minScale  : 1
-      maxScale  : 1
-      transition: 'concave', # none/fade/slide/convex/concave/zoom
-
     
 $(document).ready(ready)
 $(document).on('page:load', ready)

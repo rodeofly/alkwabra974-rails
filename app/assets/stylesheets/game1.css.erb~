@@ -25,7 +25,7 @@
   border-radius : 10px;
 }
 
-.star {
+.new-power {
   position :absolute;
   width : 50px;
   height: 50px;
@@ -248,7 +248,7 @@
  display : none;
 }
 
-#wow_dialog {
+#wow-dialog {
   font-size   : 75px;
   font-weight : bolder;
   text-align  : center;
@@ -340,6 +340,25 @@
   top : 0;
 
 }
+.chapter {
+  background : no-repeat url(<%= asset_path('chapters/chapter1.jpg') %>);
+  background-size : 100%;
+
+}
+.reward {
+  position:absolute;
+  top:35%;
+  width:100%;
+  text-align : center;
+}
+
+.star-reward {
+ display:inline-block;
+ width:200px;
+ height:200px;
+ background : no-repeat url(<%= asset_path('star.png') %>);
+ background-size : 100%;
+}
 
 .score {
   position : absolute ;
@@ -348,7 +367,7 @@
   margin :0;
   display :flex;
   bottom : -20px;
-  left : -25px;
+  left : -10px;
   flex-flow : row nowrap;
   width:75px;
   align-content : flex-end;
