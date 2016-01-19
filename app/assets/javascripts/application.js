@@ -15,6 +15,7 @@
 //= require jquery-ui
 //= require reveal
 //= require jquery.fireworks
+//= require touchpunch.min
 
 //= require turbolinks
 //= require_tree .
