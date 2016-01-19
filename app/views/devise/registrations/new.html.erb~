@@ -1,4 +1,4 @@
-<div class="not-logged">
+<div class="before_play">
   <h1>S'inscrire</h1>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
@@ -20,32 +20,34 @@
       <% end %><br />
       <%= f.password_field :password, autocomplete: "off" %>
     </div>
-
     <div class="field">
       <%= f.label :password_confirmation %><br />
       <%= f.password_field :password_confirmation, autocomplete: "off" %>
     </div>
     
+    <table>
+    <tr><td>
     <div class="field">
       <%= f.label :sexe %><br>
       <%= f.select :sexe, User::sexes %>
     </div>
-
+    </td><td>
     <div class="field">
       <%= f.label :age %><br>
       <%= f.select :age, User::ages %>
     </div>
- 
+    </td><td>
     <div class="field">
       <%= f.label :classe %><br>
       <%= f.select :classe, User::classes %>
     </div>
-    
+    </td><td>
     <div class="field">
       <%= f.label :location %><br>
       <%= f.select :location, User::locations %>
     </div>
-    
+    </td></tr>
+    </table>
     
     <div class="actions">
       <%= f.submit "C'est parti !" %>
