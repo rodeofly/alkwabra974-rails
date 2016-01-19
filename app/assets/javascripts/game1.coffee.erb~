@@ -741,7 +741,7 @@ checkSuccess = () ->
             console.log previous_score
             if score > previous_score
               for i in [1..(score-previous_score)]
-                $( "#score#{chapter}-#{level}" ).append(  "<img class='star-point' src='<%= asset_path('star.png') %>' style='display:inline-block;padding:0;margin:0;width:10px;height:10px;background-size:100%;'>" )
+                $( "#score#{chapter}-#{level}" ).append(  "<div class='star-point'></div>" )
               
             $.post
               url      : "/tentatives"
@@ -818,7 +818,7 @@ unblock = (draggable) ->
   console.log "Leaving block mode..."
   blocked = false
   shots++
-  $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+  $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
   $( ".carte" ).not(draggable.find(".carte")).off "click mousedown"
   draggable.remove() if drop_once
   draggableCards()
@@ -875,7 +875,7 @@ fractionSimplify = () ->
       else
         get_card(  $( this ) ).moveTo "1"
       shots++
-      $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+      $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
       ui.draggable.remove()
       explosion_effect( $(this).attr("id") , "none" )
 
@@ -909,12 +909,12 @@ additionPower = () ->
         drop_number = parseInt carte.attr("data-valeur") 
         get_card( carte ).moveTo "#{drop_number+drag_number}"
         shots++
-        $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+        $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
       else
         get_card( carte ).moveTo "0"           
       
       shots++
-      $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+      $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
       ui.draggable.remove()
       explosion_effect( $(this).attr("id"), "none" )       
       update_style() if stylePower
@@ -943,7 +943,7 @@ primeFactorPower = () ->
           $( this ).before (new Card("-1")).to_html()
           get_card($(this)).reverse()
     shots++
-    $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+    $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
     draggableCards()
     
 
@@ -1003,7 +1003,7 @@ droppableSide = (side) ->
               get_card( id ).moveTo "-1"
             drop_pos(ui.draggable, $(this))
             shots++
-            $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+            $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
             if $( "##{side_draggable}" ).is( ":empty" )
               $("##{side_draggable}").append (new Fraction("0")).to_html()
             else
@@ -1073,14 +1073,14 @@ draggableCards = () ->
   $( ".carte[data-valeur='1']:not(:only-child)" ).not( ".fraction[data-side='pioche'] .carte" ).on "click", ->
     event.stopPropagation() 
     shots++
-    $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+    $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
     explosion_effect( $(this).attr("id"), $(this) )
 
   $( ".carte[data-valeur='0']" ).click (event, ui) ->
     event.stopPropagation() 
     if $(this).closest(".fraction").parent().children(".fraction").length > 1
       shots++
-      $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+      $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
       explosion_effect( $(this).attr("id"), $(this).closest(".fraction") )
 
   ##############################################################################
@@ -1200,7 +1200,7 @@ play = () ->
   level_data.reveal = level_data.reveal ? []
   if "all" not in level_data.reveal
     level_data.reveal.push( "-#{i}" ) for i in level_data.reveal
-  $("#shots").html( "[#{chapter}-#{level}]<br>#{shots}/#{level_data.shots}" )
+  $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
   insert( level_data ) 
   draggableCards()
   astuces()

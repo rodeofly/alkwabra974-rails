@@ -333,10 +333,29 @@
 }
 
 #shots {
-  position : absolute;
+  position : relative;
+  display  : block;
   margin : auto;
   width : 100px;
   top : 0;
 
+}
+
+.score {
+  display :inline-block
+  top:35%;
+  width:100%;
+  margin : auto;
+}
+
+star-point {
+  display:inline-block;
+  padding:0;
+  margin:0;
+  width:10px;
+  height:10px;
+  background-image : url(<%= asset_url('star.png') %>);
+  background-size:100%;
+  background-color : none;
 }
 

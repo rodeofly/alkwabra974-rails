@@ -741,7 +741,7 @@ checkSuccess = () ->
             console.log previous_score
             if score > previous_score
               for i in [1..(score-previous_score)]
-                $( "#score#{chapter}-#{level}" ).append(  "<img class='star-point' src='<%= asset_path('star.png') %>' style='display:inline-block;padding:0;margin:0;width:10px;height:10px;background-size:100%;'>" )
+                $( "#score#{chapter}-#{level}" ).append(  "<div class='star-point'></div>" )
               
             $.post
               url      : "/tentatives"
@@ -1258,6 +1258,8 @@ ready = ->
       history   : true
       center    : true
       overview  : false
+      minScale  : 1
+      maxScale  : 1
       transition: 'concave', # none/fade/slide/convex/concave/zoom
 
     
