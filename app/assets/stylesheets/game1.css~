@@ -316,7 +316,7 @@
 }
 
 .explosion {
-  z-index  : 1;
+  z-index  : 0;
   position : absolute;
   width    : 100px;
   height   : 100px;
@@ -332,5 +332,11 @@
   
 }
 
+#shots {
+  position : absolute;
+  margin : auto;
+  width : 100px;
+  top : 0;
 
+}
 

@@ -33,7 +33,7 @@
     <% for l in 0..19 do %>
       <div id="score<%= c+1 %>-<%= l+1 %>" class="scores" style="display:flex;top:35%;width:100%;text-align : center;">    
       <% for s in 0..(@tentatives[c][l].to_i-1) do %>
-        <img class="star-point" src='<%= asset_path('star.png') %>' style='display:inline-block;padding:0;margin:0;width:20px;height:20px;background-size:100%;'>
+        <img class="star-point" src='<%= asset_path('star.png') %>' style='display:inline-block;padding:0;margin:0;width:10px;height:10px;background-size:100%;'>
       <% end %>
       </div>
     <% end %>
@@ -49,8 +49,7 @@
       </div>
       <div id="wow_dialog" class="dialog">!</div>
       <div id="astuce" class="astuce"></div><div id="victory-anime" ></div>
-      <div id="panel_bottom">    
-        <div>zoom x<span id="amount-zoom">100</span></div><div id="slider-zoom"></div>
+      <div id="panel_bottom">
         <button id="back">Menu</button><button class="play">Refaire</button><button id="shots"></button><span id="level_info"></span>
       </div> 
   </div>

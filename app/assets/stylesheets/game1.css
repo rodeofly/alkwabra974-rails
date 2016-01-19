@@ -332,5 +332,12 @@
   
 }
 
+#shots {
+  position : relative;
+  display  : block;
+  margin : auto;
+  width : 100px;
+  top : 0;
 
+}
 
