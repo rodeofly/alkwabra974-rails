@@ -647,7 +647,7 @@ shuffle_cards = ( container ) ->
   filled_areas = []
   calc_overlap = (a1) ->
     [overlap, i] = [0, 0]
-    while i++ < filled_areas.length
+    while i < filled_areas.length
       a2 = filled_areas[i]
       # no intersection cases
       if not ( (a1.x + a1.width < a2.x) or (a2.x + a2.width < a1.x) or (a1.y + a1.height < a2.y) or (a2.y + a2.height < a1.y) )
@@ -657,6 +657,7 @@ shuffle_cards = ( container ) ->
         intersection = (x1 - x2) * (y1 - y2)
         overlap += intersection
         #console.log("( "+x1+" - "+x2+" ) * ( "+y1+" - "+y2+" ) = " + intersection);
+      i++
       #console.log("overlap = " + overlap + " on " + filled_areas.length + " filled areas ");
     return overlap
 
