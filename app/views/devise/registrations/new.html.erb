@@ -1,12 +1,16 @@
-<div class="not-logged">
+<div class="before_play">
   <h1>S'inscrire</h1>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= devise_error_messages! %>
-
+    <div class="field">
+      <%= f.label :name %><br />
+      <%= f.text_field :name, autofocus: true %>
+    </div>
+    
     <div class="field">
       <%= f.label :email %><br />
-      <%= f.email_field :email, autofocus: true %>
+      <%= f.email_field :email %>
     </div>
 
     <div class="field">
@@ -21,7 +25,28 @@
       <%= f.label :password_confirmation %><br />
       <%= f.password_field :password_confirmation, autocomplete: "off" %>
     </div>
+    
+    <div class="field">
+      <%= f.label :sexe %><br>
+      <%= f.select :sexe, User::sexes %>
+    </div>
 
+    <div class="field">
+      <%= f.label :age %><br>
+      <%= f.select :age, User::ages %>
+    </div>
+ 
+    <div class="field">
+      <%= f.label :classe %><br>
+      <%= f.select :classe, User::classes %>
+    </div>
+    
+    <div class="field">
+      <%= f.label :location %><br>
+      <%= f.select :location, User::locations %>
+    </div>
+    
+    
     <div class="actions">
       <%= f.submit "C'est parti !" %>
     </div>

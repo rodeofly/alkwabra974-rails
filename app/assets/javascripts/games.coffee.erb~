@@ -716,7 +716,7 @@ checkSuccess = () ->
               items_left[string] = $(this).attr("id")      
           while list.length>1
             item = list.pop()
-            if ( ((item isnt "1") and (item[0] is 1)) or (item.indexOf(".1") > -1) or (item.indexOf("/1") > -1) )
+            if ( ((item isnt "1") and (item[0] is "1")) or (item.indexOf(".1") > -1) or (item.indexOf("/1") > -1) )
               beurk++
               $( "##{items_left[item]}" ).css backgroundColor : "red"
             if item.indexOf("0") > -1

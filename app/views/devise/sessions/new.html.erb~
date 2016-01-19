@@ -1,7 +1,9 @@
 <div class="not-logged">
-  Inscription (obligatoire, anonyme & gratuite) en haut à droite ! (free compulsory registration at screen's top-right)<br>
+  <h1>Bienvenue sur Alkwabra974</h2>
+  Inscription (obligatoire, anonyme & gratuite) en haut à droite !<br>
+  (free compulsory registration at screen's top-right)<br>
   <a href="https://github.com/rodeofly/alkwabra974-rails/issues">Vous avez remarqué un bug : dite le !</a>
-  <h1>Se connecter !</h1>
+  <h3>Connexion</h3>
   
 
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
