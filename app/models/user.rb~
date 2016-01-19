@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   has_many :tentatives
   
-  validates_presence_of :username, :email, :age, :sexe, :classe, :location
+  validates_presence_of :name, :email, :age, :sexe, :classe, :location
   
   enum sexes: {'sexe' => nil, 'garçon' => 1, 'fille' => 2}
   enum ages:  {'age' => nil, '- de 6 ans' => 6, '7 ans'=> 7, '8 ans'=> 8, '9 ans'=> 9, '10 ans'=> 10, '11 ans'=> 11, '12 ans'=> 12, '13 ans'=> 13, '14 ans'=> 14, '15 ans'=> 15, '16 ans et +'=> 16 }
