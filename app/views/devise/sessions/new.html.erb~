@@ -1,11 +1,7 @@
-<div class="not-logged">
-  <h1>Bienvenue sur Alkwabra974</h2>
-  Inscription (obligatoire, anonyme & gratuite) en haut à droite !<br>
-  (free compulsory registration at screen's top-right)<br>
-  <a href="https://github.com/rodeofly/alkwabra974-rails/issues">Vous avez remarqué un bug : dite le !</a>
+<div class="before_play">
+  <h1>Bienvenue sur Alkwabra974<sup><a href="https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#safe=off&q=al+khwarizmi+algebra">*</a></sup></h2>
+  Inscription en haut à droite !
   <h3>Connexion</h3>
-  
-
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="field">
       <%= f.label :email %><br />
@@ -28,5 +24,7 @@
       <%= f.submit "C'est parti !" %>
     </div>
   <% end %>
+  <br><br><br>
+  <p><a href="https://github.com/rodeofly/alkwabra974-rails/issues">Vous avez remarqué un bug : dite le !</a></p>
 </div>
 
