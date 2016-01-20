@@ -192,7 +192,6 @@
 }
 
 .carte[data-valeur='x'] {
-  background-color: none;
   animation-duration: 5s;
   animation-name: changecolor;
   animation-iteration-count: infinite;
