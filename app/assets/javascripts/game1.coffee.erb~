@@ -44,7 +44,7 @@ game_chapter =
        lhs   : ["t","-m"]
        rhs   : ["x","-m"]
        pioche: ["m"]
-       shots : 10
+       shots : 5
      11:
        lhs   : ["t","-w"]
        rhs   : ["x","t"]
@@ -54,24 +54,24 @@ game_chapter =
        lhs   : ["x","-r","d"]
        rhs   : ["p","0"]
        pioche: ["-w","-t","-d","-g","b","r","p","s"]
-       shots : 5
+       shots : 7
      13:
        lhs   : ["x","a"]
        rhs   : ["p"]
        pioche: ["-a"]
-       reveal: ["a","-a"]
+       reveal: ["a"]
        shots : 3
      14:
        lhs   : ["p","r"]
        rhs   : ["d","x","c","-c"]
        pioche: ["-d","-p","-r"]
-       reveal: ["c","-c"] 
+       reveal: ["c"] 
        shots : 5
      15:
        lhs   : ["d","b","p","-d"]
        rhs   : ["p","x","c"]
        pioche: ["-p","-c","-d"]
-       reveal: ["c","-c"]
+       reveal: ["c"]
        shots : 10
      16:
        lhs    : ["t"]
@@ -111,7 +111,7 @@ game_chapter =
        lhs    : ["b/-b","t/t","d"]
        rhs    : ["-1","-1","t/t","a/a","x"]
        reveal : ["a"]
-       shots  : 6
+       shots  : 7
      3 :       
        lhs    : ["1","t"]
        rhs    : ["-x/-x","x","x/x"]
@@ -121,7 +121,7 @@ game_chapter =
        lhs    : ["-1","c","d","x","-d","-s/-s"]
        rhs    : ["-g"]
        pioche : ["1","c","2","s"]
-       reveal : ["c","d","-d"]
+       reveal : ["c","d"]
        shots  : 8
      5 :       
        lhs    : ["x.1"]
@@ -148,7 +148,7 @@ game_chapter =
      10:       
        lhs    : ["x","-c.-t/-t","b.s.4.c.-b/-b.4.s.b"]
        rhs    : ["p"]
-       reveal : ["c","-c"]
+       reveal : ["c"]
        shots  : 12
      11:       
        lhs    : ["b.x/_"]
@@ -201,7 +201,7 @@ game_chapter =
        lhs    : ["x.-f.-d","m"]
        rhs    : ["1","g","0"]
        pioche : ["d","m","f"]
-       reveal : ["x","-f","f"]
+       reveal : ["x","f"]
        shots  : 10
   3:
    level:
@@ -275,37 +275,37 @@ game_chapter =
        lhs    : ["x.-r/b","s"]
        rhs    : ["2.-r","s"]
        pioche : ["x","b","2","s","-r"]
-       reveal : ["x","b","-x","-b"]
+       reveal : ["x","b"]
        shots  : 11
      16 :       
        lhs    : ["a.x","b"]
        rhs    : ["d"]
        pioche : ["x","a","b","d"]
-       reveal : ["x","a","b","d","-x","-a","-b","-d"]
+       reveal : ["x","a","b","d"]
        shots  : 4
      17 :       
        lhs    : ["b","q"]
        rhs    : ["a/x","q"]
        pioche : ["x","b","q"]
-       reveal : ["x","b","-x","-b"]
+       reveal : ["x","b"]
        shots  : 9
      18 :       
        lhs    : ["j","3"]
        rhs    : ["g.x/i","d/i","3"]
        pioche : ["g","i","j","d","3"]
-       reveal : ["x","g","i","j","d","3","-3","0","1","-1","-x","-g","-i","-j","-d"]
+       reveal : ["all"]
        shots  : 12
      19 :       
        lhs    : ["x/c.b","2/c"]
        rhs    : ["d","2/c"]
        pioche : ["c","d","b","2"]
-       reveal : ["c","d","b","2","-c","-d","-b","-2","0","1","-1"]
+       reveal : ["all"]
        shots  : 13
      20 :       
        lhs    : ["4","f"]
        rhs    : ["c/x","4"]
        pioche : ["f","c","x","4"]
-       reveal : ["f","c","x","4","-f","-c","-x","-4","0","1","-1"]
+       reveal : ["all"]
        shots  : 9
   4:
    level:
@@ -366,13 +366,13 @@ game_chapter =
        lhs    : ["x.2.3"]
        rhs    : ["p.6"]
        pioche : ["6"]
-       reveal : ["0","1","2","3","6"]
+       reveal : ["numbers"]
        shots  : 6
      13 :       
        lhs    : ["x/2","1/4"]
        rhs    : ["s"]
        pioche : ["1","2","4"]
-       reveal : ["1","2","4", "-1","-2","-4"]
+       reveal : ["numbers"]
        shots  : 7
        
      14 :       
@@ -595,13 +595,11 @@ explosion_effect = (place_id, target) ->
   position = $( "##{place_id}" ).offset()
   $("body").append "<div id='#{id = unique_id++}' style='top: #{position.top-25}px; left: #{position.left-25}px;' class='explosion'></div>"
   $("##{id}").css {background: "url('../assets/explosion.gif?#{Math.random()}')" }
-  if target isnt "none"
-    target.remove()
-    $("##{id}").fadeOut 1000, -> checkSuccess()
-  else
-    delay 800, -> 
-      $("##{id}").remove()
-      checkSuccess()
+  target.remove()
+  $("##{id}").fadeOut 800, ->
+    shots++
+    $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
+    checkSuccess()
 ################################################################################
 primeFactorization = (num) ->
   root = Math.sqrt(num)
@@ -666,8 +664,7 @@ shuffle_cards = ( container ) ->
 checkSuccess = () ->
   if not won
     console.log "check success..."
-    x = $( ".carte[data-valeur='x']" ).not("[data-side='pioche'] .carte")
-    #console.log "il y a #{x.length} x !"
+    x = $( "#lhs, #rhs" ).find( ".carte[data-valeur='x']" )
     if ( x.length is 1)
       xSide = x.parent().parent().parent()
       if (xSide.find(".carte").length is 1)
@@ -804,7 +801,7 @@ unblock = (draggable) ->
     $( "body" ).on "click", "#pioche .carte", -> get_card($(this)).reverse() 
   blocked = false
   shots++
-  $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
+  $( "#shots" ).html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
   $( ".carte" ).not(draggable.find(".carte")).off "click mousedown"
   draggable.remove() if drop_once
   draggableCards()
@@ -853,18 +850,13 @@ droppableFracSimplify = () ->
     activeClass : "ui-state-highlight"
     hoverClass  : "ui-state-hover"
     drop: ( event, ui ) ->
-      siblings = ui.draggable.parent().is($(this).parent())
-      if siblings
+      if siblings = ui.draggable.parent().is($(this).parent())
         drag_number = parseInt ui.draggable.attr("data-valeur") 
         drop_number = parseInt $( this ).attr("data-valeur") 
         get_card(  $( this ) ).moveTo "#{drop_number*drag_number}"
       else
         get_card(  $( this ) ).moveTo "1"
-      shots++
-      $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
-      ui.draggable.remove()
-      explosion_effect( $(this).attr("id") , "none" )
-
+      explosion_effect( $(this).attr("id") , ui.draggable )
 ################################################################################
 ################################################################################
 ################################################################################               
@@ -873,15 +865,14 @@ droppableFracAddition = () ->
     greedy: true
     tolerance: 'touch'        
     accept: (draggable) ->
-      drop = $( this ).children(':last').is(':empty') and $( this ).children(':first').children().is(':only-child')
-      drag = draggable.children(':last').is(':empty') and draggable.children(':first').children().is(':only-child')
+      drop_single = $( this ).children(':last').is(':empty') and $( this ).children(':first').children().is(':only-child')
+      drag_single = draggable.children(':last').is(':empty') and draggable.children(':first').children().is(':only-child')
       onAside = draggable.parent().attr("id") is $(this).parent().attr("id")
-      if drag and drop and onAside
+      if drag_single and drop_single and onAside
         drop = $( this ).children(':first').children(':first').attr( "data-valeur" )
         drag = draggable.children(':first').children(':first').attr( "data-valeur" )
         drag_number = $.isNumeric( drag )
         drop_number = $.isNumeric( drop )
-        #console.log drop, drag
         return ( ( ("-#{drop}" is drag) or ("-#{drag}" is drop) ) or ( addPower and drag_number and drop_number))
     active : "ui-state-active"
     hover  : "ui-state-hover"
@@ -896,27 +887,19 @@ droppableFracAddition = () ->
         get_card( carte ).moveTo "#{drop_number+drag_number}"
       else
         get_card( carte ).moveTo "0"           
-      
-      shots++
-      $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
-      ui.draggable.remove()
-      explosion_effect( $(this).attr("id"), "none" )       
+      explosion_effect( $(this).attr("id"), ui.draggable )       
       update_style() if stylePower
 ################################################################################
 ################################################################################  
 ################################################################################
-delete_useless_card = () ->
+ability_to_delete_useless_card = () ->
   $( "body" ).on "click", ".carte[data-valeur='1']:not(:only-child)", (event, ui) ->
-    event.stopPropagation() 
-    shots++
-    $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
+    event.stopImmediatePropagation() 
     explosion_effect( $(this).attr("id"), $(this) )
 
   $( "body" ).on "click", ".carte[data-valeur='0']", (event, ui) ->
     event.stopPropagation() 
     if $(this).closest(".fraction").parent().children(".fraction").length > 1
-      shots++
-      $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
       explosion_effect( $(this).attr("id"), $(this).closest(".fraction") )
 ################################################################################
 ################################################################################
@@ -934,12 +917,16 @@ primeFactorPower = () ->
       if negPower
         next = $(this).next(".carte")
         if ( (next.length > 0) and (next.attr("data-valeur")[0] is "-") )
-          console.log "woaer"
           get_card(next).reverse()
           get_card($(this)).reverse()
         else
-          $( this ).before (new Card("-1")).to_html()
-          get_card($(this)).reverse()
+          prev = $(this).prev(".carte")
+          if ( (prev.length > 0) and (prev.attr("data-valeur")[0] is "-") )
+            get_card(prev).reverse()
+            get_card($(this)).reverse()
+          else
+            $( this ).before (new Card("-1")).to_html()
+            get_card($(this)).reverse()
     shots++
     $("#shots").html( "level #{chapter}-#{level}<br>#{shots}/#{level_data.shots}" )
     draggableCards()      
@@ -1167,15 +1154,13 @@ play = () ->
   dropdenPower = true  if ( (chapter>1) and (level>10) or (chapter > 2) and (not ( (chapter is 3) and (level is 7) )) )
   crossPower   = true  if (chapter>2)
   dropnumPower = true  if ( (chapter > 3) or ((chapter>2) and (level>6)) )
-  
   multPower    = true  if ( (chapter > 3) or ((chapter > 3) and (level>7)) )
   addPower     = true  if (chapter>3)
   negPower     = true  if chapter > 4
   stylePower   = true  if "#{chapter}-#{level}" in ["2-19", "2-20", "3-17", "3-18", "3-19", "3-20", "4-17", "4-18", "4-19", "4-20", "5-17","5-18","5-19","5-20"]
-  
-  
+
   primeFactorPower()  if ( (chapter > 3) or ((chapter > 3) and (level>3)) )
-  delete_useless_card()
+  ability_to_delete_useless_card()
   if reversePower
     $( "body" ).on "click", "#pioche .carte", -> get_card($(this)).reverse() 
     
