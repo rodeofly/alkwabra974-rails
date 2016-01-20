@@ -111,7 +111,7 @@ game_chapter =
        lhs    : ["b/-b","t/t","d"]
        rhs    : ["-1","-1","t/t","a/a","x"]
        reveal : ["a"]
-       shots  : 6
+       shots  : 7
      3 :       
        lhs    : ["1","t"]
        rhs    : ["-x/-x","x","x/x"]
@@ -747,7 +747,13 @@ update_style = () ->
   
 flash_alert = (element) ->
   $( "#wow-dialog" ).dialog "close"    
-  $( "#wow-dialog" ).dialog  "open", position : { my: "center bottom", at: "center top", of: element }
+  $( "#wow-dialog" ).dialog  
+    width    : '50px'
+    height   : 100
+    show     : { effect: "blind", duration: 100 }
+    open     : (event, ui) -> setTimeout("$('#wow-dialog').dialog('close')",1000)
+    position : { my: "center bottom", at: "center top", of: element }
+  $( "#wow-dialog" ).dialog "open"
 ################################################################################
 ################################################################################
 ################################################################################
@@ -1193,12 +1199,7 @@ ready = ->
     # none/fade/slide/convex/concave/zoom
       
   $("#screen").hide()
-  $( "#wow-dialog" ).dialog
-    autoOpen : false
-    width    : '50px'
-    height   : 100
-    show     : { effect: "blind", duration: 100 }
-    open     : (event, ui) -> setTimeout("$('#wow-dialog').dialog('close')",1000)
+  $( "#wow-dialog" ).dialog( autoOpen : false )
     
   $( "#shots" ).button( { icons: { primary  : "ui-icon-gear" }, text: false } )
   $( "#back" ).button( { icons: { primary  : "ui-icon-arrowreturnthick-1-n" }, text: false})
