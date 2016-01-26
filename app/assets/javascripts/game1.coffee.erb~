@@ -677,20 +677,24 @@ checkSuccess = () ->
           $( "#victory-anime" ).hide()
           count_beurk = ->
             beurk = 0
-            [items_left, list, value_side] = [{}, [], opposite[xSide.attr("data-side")] ]
+            items_left = {}
+            list = []
+            value_side = opposite[xSide.attr("data-side")]
             $( "##{value_side}" ).find( ".fraction" ).each ->
               [numerateur, denominateur] = [ [], [] ]
-              $(this).find( ".numerateur .carte"  ).each -> numerateur.push   $(this).attr("data-valeur")
-              $(this).find( ".denominateur .carte").each -> denominateur.push $(this).attr("data-valeur")
+              $(this).find( ".numerateur   .carte" ).each -> numerateur.push   $(this).attr("data-valeur")
+              $(this).find( ".denominateur .carte" ).each -> denominateur.push $(this).attr("data-valeur")
               if denominateur is []
                 list.push( string = numerateur.sort().join(".") )
                 items_left[string] = $(this).attr("id")
               else
                 list.push( string = [numerateur.sort().join("."), denominateur.sort().join(".")].join("/") )
                 items_left[string] = $(this).attr("id") 
-            clone_list = list               
+            clone_list = list.slice(0)
+            console.log "voici la clone_liste :p #{clone_list}"              
             while clone_list.length>0
               item = clone_list.pop()
+              console.log "voici la liste : #{typeof list}"
               split = item.split("/")
               numerateur   = split[0]
               denominateur = if split.length > 1 then split[1] else ""
@@ -700,6 +704,7 @@ checkSuccess = () ->
                     if ( ("-#{i}" is "#{j}") or ("-#{j}" is "#{i}") or ("#{j}" is "#{i}") )
                       $( "##{items_left[item]}" ).css backgroundColor : "red"
                       beurk++
+            
             while list.length>0
               item = list.pop()         
               if ( ((item isnt "1") and (item[0] is "1")) or (item.indexOf(".1") > -1) or (item.indexOf("/1") > -1) )
@@ -709,6 +714,7 @@ checkSuccess = () ->
                 beurk++
                 $( "##{items_left[item]}" ).css backgroundColor : "red"
               for item2 in list
+                console.log "let's compare #{item} | #{item2}"
                 if ( ("-#{item}" is "#{item2}") or ("-#{item2}" is "#{item}") or ("-1.#{item}" is "#{item2}") or ("-1.#{item2}" is "#{item}") )
                   $( "##{items_left[item]}, ##{items_left[item2]}" ).css backgroundColor : "red"
                   beurk++
