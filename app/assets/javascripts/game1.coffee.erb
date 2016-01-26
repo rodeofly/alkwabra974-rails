@@ -709,6 +709,7 @@ checkSuccess = () ->
                 beurk++
                 $( "##{items_left[item]}" ).css backgroundColor : "red"
               for item2 in list
+                console.log "let's compare #{item} | #{item2}"
                 if ( ("-#{item}" is "#{item2}") or ("-#{item2}" is "#{item}") or ("-1.#{item}" is "#{item2}") or ("-1.#{item2}" is "#{item}") )
                   $( "##{items_left[item]}, ##{items_left[item2]}" ).css backgroundColor : "red"
                   beurk++
