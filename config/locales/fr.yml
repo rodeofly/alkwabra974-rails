@@ -5,6 +5,7 @@ fr:
       user:
         name: "Nom"
         location: "Lieu"
+        tentatives_count : "Tentatives"
   
     errors:
       messages:

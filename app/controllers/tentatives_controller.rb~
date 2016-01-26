@@ -30,7 +30,6 @@ class TentativesController < ApplicationController
 
     respond_to do |format|
       if @tentative.save
-        format.js
         format.html { redirect_to @tentative, notice: 'Tentative was successfully created.' }
         format.json { render :show, status: :created, location: @tentative }
       else

@@ -4,7 +4,7 @@ fr:
     attributes:
       user:
         name: "Nom"
-        location: "lieu"
+        location: "Lieu"
   
     errors:
       messages:

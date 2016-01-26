@@ -12,4 +12,14 @@ class User < ActiveRecord::Base
   enum classes: {'classe' => nil,'primaire'=> 12, 'cp'=> 11, 'ce1'=> 10, 'ce2'=> 9, 'cm1'=> 8, 'cm2'=> 7, '6ème'=> 6, '5ème'=> 5, '4ème'=> 4, '3ème'=> 3, 'Lycée'=> 2, 'ailleurs' => 1 }
   enum locations: {'lieu' => nil, 'Ile de la Réunion'=> 1, 'France Métropole'=> 2, 'Autre'=> 3}   
 
+
+  rails_admin do
+    list do
+      field :id
+      field :name
+      field :email
+      field :tentatives_count
+    end
+  end
+ 
 end
