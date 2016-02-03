@@ -694,7 +694,7 @@ checkSuccess = () ->
             console.log "voici la clone_liste :p #{clone_list}"              
             while clone_list.length>0
               item = clone_list.pop()
-              console.log "voici la liste : #{typeof list}"
+              
               split = item.split("/")
               numerateur   = split[0]
               denominateur = if split.length > 1 then split[1] else ""
@@ -704,7 +704,7 @@ checkSuccess = () ->
                     if ( ("-#{i}" is "#{j}") or ("-#{j}" is "#{i}") or ("#{j}" is "#{i}") )
                       $( "##{items_left[item]}" ).css backgroundColor : "red"
                       beurk++
-            
+            console.log "voici la liste : #{list}"
             while list.length>0
               item = list.pop()         
               if ( ((item isnt "1") and (item[0] is "1")) or (item.indexOf(".1") > -1) or (item.indexOf("/1") > -1) )
@@ -775,16 +775,6 @@ flash_alert = (element) ->
   $( "#wow-dialog" ).dialog "open"
 ################################################################################
 ################################################################################
-################################################################################
-drop_pos = (element, drop, ui) ->
-  if stylePower
-    drop.children(":last").after( "<span class='bsign'>+</span>" ).after( element.attr( "data-style", true) )
-    update_style()                   
-  else
-    left = ui.helper.offset().left - drop.offset().left
-    top  = ui.helper.offset().top  - drop.offset().top
-    element.css({position: "absolute", top: top, left: left})
-    drop.append( element )
 ################################################################################
 block = (draggable) ->
   console.log "Entering block mode..."

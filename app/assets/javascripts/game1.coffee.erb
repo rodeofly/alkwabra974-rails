@@ -776,16 +776,6 @@ flash_alert = (element) ->
 ################################################################################
 ################################################################################
 ################################################################################
-drop_pos = (element, drop, ui) ->
-  if stylePower
-    drop.children(":last").after( "<span class='bsign'>+</span>" ).after( element.attr( "data-style", true) )
-    update_style()                   
-  else
-    left = ui.helper.offset().left - drop.offset().left
-    top  = ui.helper.offset().top  - drop.offset().top
-    element.css({position: "absolute", top: top, left: left})
-    drop.append( element )
-################################################################################
 block = (draggable) ->
   console.log "Entering block mode..."
   $( "body" ).off "click", "#pioche .carte"
@@ -979,6 +969,7 @@ droppableSide = (side) ->
       drop_pos = (element, drop) ->
         if stylePower
           drop.children(":last").after( "<span class='bsign'>+</span>" ).after( element.attr( "data-style", true) )
+          element.css({position: "relative", top: 0, left: 0})
           update_style()                   
         else
           left = ui.helper.offset().left - drop.offset().left
