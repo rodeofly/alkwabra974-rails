@@ -698,21 +698,23 @@ checkSuccess = () ->
               split = item.split("/")
               numerateur   = split[0]
               denominateur = if split.length > 1 then split[1] else ""
+              
+              if ( ( (numerateur isnt "1") and (numerateur.indexOf("1") > -1) ) or (numerateur.indexOf("0") > -1) )
+                beurk++
+                $( "##{items_left[item]}" ).css backgroundColor : "red"
+              if (denominateur.indexOf("1") > -1)
+                beurk++
+                $( "##{items_left[item]}" ).css backgroundColor : "red"
+                
               if denominateur.length > 0
                 for i in numerateur.split(".")
                   for j in denominateur.split(".")
-                    if ( ("-#{i}" is "#{j}") or ("-#{j}" is "#{i}") or ("#{j}" is "#{i}") )
+                    if ( ( ("-#{i}" is "#{j}") or ("-#{j}" is "#{i}") or ("#{j}" is "#{i}") ) and (chapter > 2) )
                       $( "##{items_left[item]}" ).css backgroundColor : "red"
                       beurk++
             console.log "voici la liste : #{list}"
             while list.length>0
-              item = list.pop()         
-              if ( ((item isnt "1") and (item[0] is "1")) or (item.indexOf(".1") > -1) or (item.indexOf("/1") > -1) )
-                beurk++
-                $( "##{items_left[item]}" ).css backgroundColor : "red"
-              if item.indexOf("0") > -1
-                beurk++
-                $( "##{items_left[item]}" ).css backgroundColor : "red"
+              item = list.pop()
               for item2 in list
                 console.log "let's compare #{item} | #{item2}"
                 if ( ("-#{item}" is "#{item2}") or ("-#{item2}" is "#{item}") or ("-1.#{item}" is "#{item2}") or ("-1.#{item2}" is "#{item}") )
