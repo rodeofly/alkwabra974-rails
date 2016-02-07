@@ -8,7 +8,11 @@ RailsAdmin.config do |config|
   end
   # config.current_user_method(&:current_user)
   
-  
+  config.authorize_with do
+    puts "#########################################################################"
+    puts current_user.admin?
+    redirect_to main_app.root_path unless current_user.admin?
+  end
   ## == Cancan ==
   # config.authorize_with :cancan
 
