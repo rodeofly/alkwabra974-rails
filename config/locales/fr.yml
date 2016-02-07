@@ -1,5 +1,12 @@
 ---
 fr:
+  admin:
+    actions:
+      import:
+        title: "Importation"
+        menu: "Import"
+        breadcrumb: "Import"
+
   activerecord:
     attributes:
       user:

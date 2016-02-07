@@ -1,10 +1,17 @@
 ---
 fr:
+  admin:
+    actions:
+      import:
+        title: "Importation"
+        menu: "Import"
+
   activerecord:
     attributes:
       user:
         name: "Nom"
         location: "Lieu"
+        tentatives_count : "Tentatives"
   
     errors:
       messages:
