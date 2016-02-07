@@ -31,7 +31,7 @@ gem 'devise'
 gem 'rails_admin'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
+gem "figaro"
 # Use Unicorn as the app server
 # gem 'unicorn'
 
@@ -56,7 +56,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.1.1'
   # Add this if you're using rbenv
   gem 'capistrano-rbenv', github: "capistrano/rbenv"
-  gem "figaro"
+
 end
 
 group :production do
