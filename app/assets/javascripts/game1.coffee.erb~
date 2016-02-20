@@ -699,7 +699,7 @@ checkSuccess = () ->
               numerateur   = split[0]
               denominateur = if split.length > 1 then split[1] else ""
               
-              if ( ( (numerateur isnt "1") and (numerateur.indexOf("1") > -1) ) or (numerateur.indexOf("0") > -1) )
+              if ( ( ((numerateur isnt "1")  (numerateur isnt "-1")) and (numerateur.indexOf("1") > -1) ) or (numerateur.indexOf("0") > -1) )
                 beurk++
                 $( "##{items_left[item]}" ).css backgroundColor : "red"
               if (denominateur.indexOf("1") > -1)
@@ -709,7 +709,7 @@ checkSuccess = () ->
               if denominateur.length > 0
                 for i in numerateur.split(".")
                   for j in denominateur.split(".")
-                    if ( ( ("-#{i}" is "#{j}") or ("-#{j}" is "#{i}") or ("#{j}" is "#{i}") ) and ("#{chapter}-#{level}" isnt "2-2") )
+                    if ( ( ("-#{i}" is "#{j}") or ("-#{j}" is "#{i}") or ("#{j}" is "#{i}") ) and (chapter > 2) )
                       $( "##{items_left[item]}" ).css backgroundColor : "red"
                       beurk++
             console.log "voici la liste : #{list}"
@@ -1009,7 +1009,8 @@ droppableSide = (side) ->
               checkSuccess()
             draggableCards()
 
-################################################################################  ################################################################################
+################################################################################
+################################################################################
 ################################################################################                      
 draggableCards = () ->        
   $( ".fraction[data-side='pioche']" ).draggable
