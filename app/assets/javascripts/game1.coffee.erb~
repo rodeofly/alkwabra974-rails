@@ -672,7 +672,7 @@ checkSuccess = () ->
         won = true
         $( "#lhs, #rhs" ).droppable( "destroy" )
         $( "#astuce" ).hide()
-        $( "#victory-anime" ).show().css(background : "center no-repeat url(<%= asset_path('countdown.gif') %>?#{Math.random()})" )
+        $( "#victory-anime" ).show()
         delay 5000, ->
           $( "#victory-anime" ).hide()
           count_beurk = ->
@@ -699,7 +699,7 @@ checkSuccess = () ->
               numerateur   = split[0]
               denominateur = if split.length > 1 then split[1] else ""
               
-              if ( ( ((numerateur isnt "1")  (numerateur isnt "-1")) and (numerateur.indexOf("1") > -1) ) or (numerateur.indexOf("0") > -1) )
+              if ( ( (numerateur isnt "1") and (numerateur isnt "-1") and (numerateur.indexOf("1") > -1) and (numerateur.indexOf("-1") > -1) ) or (numerateur.indexOf("0") > -1) )
                 beurk++
                 $( "##{items_left[item]}" ).css backgroundColor : "red"
               if (denominateur.indexOf("1") > -1)

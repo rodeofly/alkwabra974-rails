@@ -317,7 +317,8 @@
   width    : 100%;
   height   : 100%;
   background-color : rgba(0,0,0,0);
-  background-image : 100% 100% url('cartes/DC.png');
+  background-image : url('cartes/DC.png');
+  background-size : 100% 100%;
 }
 
 .explosion {
@@ -334,7 +335,7 @@
   width: 100%;
   height: 100%;
   z-index:0;
-  
+  background : "center no-repeat url(<%= asset_path('countdown.gif') %>);
 }
 
 #shots {
