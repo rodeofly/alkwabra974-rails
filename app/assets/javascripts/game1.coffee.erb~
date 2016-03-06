@@ -670,6 +670,7 @@ checkSuccess = () ->
       if (xSide.find(".carte").length is 1)
         console.log "success !"
         won = true
+        $( "button" ).disable(true)
         $( "#lhs, #rhs" ).droppable( "destroy" )
         $( "#astuce" ).hide()
         $( "#victory-anime" ).show()
@@ -699,7 +700,8 @@ checkSuccess = () ->
               numerateur   = split[0]
               denominateur = if split.length > 1 then split[1] else ""
               
-              if ( ( (numerateur isnt "1") and (numerateur isnt "-1") and (numerateur.indexOf("1") > -1) and (numerateur.indexOf("-1") > -1) ) or (numerateur.indexOf("0") > -1) )
+              
+              if ( ( (numerateur isnt "1") and (numerateur isnt "-1") and (numerateur.indexOf(".1") > -1) ) or (numerateur.indexOf("0") > -1) )
                 beurk++
                 $( "##{items_left[item]}" ).css backgroundColor : "red"
               if (denominateur.indexOf("1") > -1)
@@ -755,6 +757,7 @@ checkSuccess = () ->
                   score   : score 
               success  : (data)  ->
                 console.log("Done...Database updated !")
+                $( "button" ).disable(false)
                 if level is 20
                   $( ".next" ).hide()
                   $( ".up" ).show()
@@ -1182,6 +1185,7 @@ play = () ->
 ################################################################################
 ################################################################################     
 ready = ->
+  $( "button" ).button()
   for i in [1..5]
     $( "#chaptersEnd" ).before "<section id='chapter#{i}' class='chapter'><h2>Chapitre #{i}</h2></section>"
     for j in [1..20]
